@@ -5734,6 +5734,15 @@ public final class Settings {
         public static final String QS_SHOW_BATTERY_PERCENT = "qs_header_show_battery_percent";
 
         /**
+         * Whether allowing pocket service to register sensors and dispatch informations.
+         *   0 = disabled
+         *   1 = enabled
+         * @author Carlo Savignano
+         * @hide
+         */
+        public static final String POCKET_JUDGE = "pocket_judge";
+
+        /**
          * Battery style
          * @hide
          */
@@ -5945,6 +5954,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(AUTO_ACCENT_TYPE);
             PRIVATE_SETTINGS.add(SYSTEMUI_PLUGIN_VOLUME);
             PRIVATE_SETTINGS.add(QS_SHOW_BATTERY_PERCENT);
+            PRIVATE_SETTINGS.add(POCKET_JUDGE);
         }
 
         /**
