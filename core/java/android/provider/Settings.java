@@ -10169,6 +10169,18 @@ public final class Settings {
         public static final String PULSE_SMOOTHING_ENABLED = "pulse_smoothing_enabled";
 
         /**
+         * @hide
+         */
+        public static final String QS_SHOW_AUTO_BRIGHTNESS =
+                "qs_show_auto_brightness";
+
+        /**
+         * @hide
+         */
+        public static final String QS_SHOW_BRIGHTNESS_SLIDER =
+                "qs_show_brightness_slider";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
