@@ -77,4 +77,5 @@
     <!-- Tux clock -->
     <string name="clock_title_tux" translatable="false">Tux</string>
 
+    <string name="quick_settings_sound_search">Sound search</string>
 </resources>
