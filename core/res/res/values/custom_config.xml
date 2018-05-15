@@ -198,4 +198,7 @@
     <!-- Default fod pressed color -->
     <integer name="config_fod_pressed_color">1</integer>
 
+    <!-- Whether device has physical tri state switch -->
+    <bool name="config_hasAlertSlider">false</bool>
+
 </resources>
