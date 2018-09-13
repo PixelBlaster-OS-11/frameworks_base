@@ -88,5 +88,6 @@ public class SystemSettings {
         Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN,
         Settings.System.SCREENSHOT_SOUND,
         Settings.System.VOLUME_ROCKER_WAKE,
+        Settings.System.USE_OLD_MOBILETYPE,
     };
 }
