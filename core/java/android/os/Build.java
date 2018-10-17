@@ -280,6 +280,13 @@ public class Build {
                 "ro.build.version.security_patch", "");
 
         /**
+         * The user-visible Hycon security patch level.
+         * @hide
+         */
+        public static final String SECURITY_PATCH_HYCON = SystemProperties.get(
+                "ro.hycon.version.security_patch", "");
+
+        /**
          * The user-visible SDK version of the framework in its raw String
          * representation; use {@link #SDK_INT} instead.
          *
