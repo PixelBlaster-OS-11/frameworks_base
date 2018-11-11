@@ -87,5 +87,14 @@
     <string name="change_clock_face">Swipe to change the clock face</string>
 
     <!-- statusbar icons -->
-    <string name="statusbar_items_title">Statusbar icons</string>        
+    <string name="statusbar_items_title">Statusbar icons</string>
+
+
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>            
 </resources>

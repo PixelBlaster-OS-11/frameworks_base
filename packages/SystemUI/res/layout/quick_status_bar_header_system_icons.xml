@@ -48,6 +48,15 @@
         systemui:showDark="false" />
     </LinearLayout>
 
+    <com.android.systemui.statusbar.policy.NetworkTraffic
+        android:id="@+id/network_traffic"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|end"
+        android:layout_gravity="center_vertical|end"
+        android:visibility="gone" />
+    </LinearLayout>
+
     <android.widget.Space
         android:id="@+id/space"
         android:layout_width="0dp"
