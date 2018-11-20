@@ -5498,6 +5498,18 @@ public final class Settings {
         public static final String DOZE_TRIGGER_DOUBLETAP = "doze_trigger_doubletap";
 
         /**
+         * Hold current font name and name of the originating package Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_INFO = "font_info";
+
+        /**
+         * Hold list of installed font provider packages. Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_PACKAGES = "font_packages";
+
+        /**
          * Show or hide clock
          * 0 - hide
          * 1 - show (default)
@@ -5584,6 +5596,7 @@ public final class Settings {
          */
         public static final String STATUS_BAR_TICKER_TICK_DURATION =
                 "status_bar_ticker_tick_duration";
+
 
         /**
          * @hide
