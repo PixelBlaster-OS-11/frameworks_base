@@ -99,5 +99,6 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_HEADERS,
         Settings.System.QS_PANEL_BG_USE_NEW_TINT,
         Settings.System.COLOR_BUCKET_OVERLAY,
+        Settings.System.ACCENT_COLOR,
     };
 }
