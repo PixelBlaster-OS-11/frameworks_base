@@ -217,6 +217,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         if (mRegularTileLayout instanceof PagedTileLayout) {
             mQsTileRevealController = new QSTileRevealController(mContext, this,
                     (PagedTileLayout) mRegularTileLayout);
+            updateSettings();
         }
         mQSLogger.logAllTilesChangeListening(mListening, getDumpableTag(), mCachedSpecs);
         updateResources();
@@ -268,7 +269,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         }
         return mRegularTileLayout;
     }
-
 
     protected QSTileLayout createHorizontalTileLayout() {
         return createRegularTileLayout();
@@ -1252,6 +1252,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         int getOffsetTop(TileRecord tile);
 
         boolean updateResources();
+        void updateSettings();
 
         void setListening(boolean listening);
 
@@ -1278,5 +1279,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         default void setExpansion(float expansion) {}
 
         int getNumVisibleTiles();
+    }
+
+    public void updateSettings() {
+        if (mTileLayout != null) {
+            mTileLayout.updateSettings();
+        }
     }
 }
