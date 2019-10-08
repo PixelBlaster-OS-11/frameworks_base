@@ -63,6 +63,7 @@ import androidx.lifecycle.LifecycleRegistry;
 import com.android.internal.logging.UiEventLogger;
 import com.android.settingslib.Utils;
 import com.android.systemui.BatteryMeterView;
+import com.android.systemui.Dependency;
 import com.android.systemui.DualToneHandler;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
@@ -85,7 +86,9 @@ import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.RingerModeTracker;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +105,7 @@ import javax.inject.Named;
  */
 public class QuickStatusBarHeader extends RelativeLayout implements
         View.OnClickListener, NextAlarmController.NextAlarmChangeCallback,
-        ZenModeController.Callback, LifecycleOwner {
+        ZenModeController.Callback, LifecycleOwner, TunerService.Tunable {
     private static final String TAG = "QuickStatusBarHeader";
     private static final boolean DEBUG = false;
 
@@ -111,6 +114,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private static final int FADE_ANIMATION_DURATION_MS = 300;
     private static final int TOOLTIP_NOT_YET_SHOWN_COUNT = 0;
     public static final int MAX_TOOLTIP_SHOWN_COUNT = 2;
+
+    public static final String STATUS_BAR_CUSTOM_HEADER =
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
 
     private final NextAlarmController mAlarmController;
     private final ZenModeController mZenController;
@@ -156,6 +162,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private RingerModeTracker mRingerModeTracker;
     private boolean mAllIndicatorsEnabled;
     private boolean mMicCameraIndicatorsEnabled;
+
+    private boolean mLandscape;
+    private boolean mHeaderImageEnabled;
 
     private PrivacyItemController mPrivacyItemController;
     private final UiEventLogger mUiEventLogger;
@@ -252,9 +261,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mPrivacyChip.setOnClickListener(this::onClick);
         mCarrierGroup = findViewById(R.id.carrier_group);
 
-
-        updateResources();
-
         Rect tintArea = new Rect(0, 0, 0, 0);
         int colorForeground = Utils.getColorAttrDefaultColor(getContext(),
                 android.R.attr.colorForeground);
@@ -289,6 +295,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         mAllIndicatorsEnabled = mPrivacyItemController.getAllIndicatorsAvailable();
         mMicCameraIndicatorsEnabled = mPrivacyItemController.getMicCameraAvailable();
+
+        updateResources();
+
+        Dependency.get(TunerService.class).addTunable(this,
+                StatusBarIconController.ICON_BLACKLIST,
+                STATUS_BAR_CUSTOM_HEADER);
     }
 
     public QuickQSPanel getHeaderQsPanel() {
@@ -388,12 +400,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        mLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         updateResources();
-
-        // Update color schemes in landscape to use wallpaperTextColor
-        boolean mIsLandscape =
-                newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        mClockView.useWallpaperTextColor(mIsLandscape);
 
         int topPadding = mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_top_padding);
         int bottomPadding = mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_bottom_padding);
@@ -416,6 +424,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         int qqsHeight = mContext.getResources().getDimensionPixelSize(
                 R.dimen.qs_quick_header_panel_height);
 
+        if (mHeaderImageEnabled) {
+            qqsHeight += mContext.getResources().getDimensionPixelSize(
+                    R.dimen.qs_header_image_offset);
+        }
+
         setMinimumHeight(sbHeight + qqsHeight);
     }
 
@@ -432,14 +445,16 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 resources.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
         mHeaderTextContainerView.setLayoutParams(mHeaderTextContainerView.getLayoutParams());
 
-        mSystemIconsView.getLayoutParams().height = resources.getDimensionPixelSize(
-                com.android.internal.R.dimen.quick_qs_offset_height);
+        int topMargin = resources.getDimensionPixelSize(
+                com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
+                resources.getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
+
+        mSystemIconsView.getLayoutParams().height = topMargin;
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
 
         ViewGroup.LayoutParams lp = getLayoutParams();
         if (mQsDisabled) {
-            lp.height = resources.getDimensionPixelSize(
-                    com.android.internal.R.dimen.quick_qs_offset_height);
+            lp.height = topMargin;
         } else {
             lp.height = WRAP_CONTENT;
         }
@@ -448,6 +463,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateStatusIconAlphaAnimator();
         updateHeaderTextContainerAlphaAnimator();
         updatePrivacyChipAlphaAnimator();
+
+        boolean shouldUseWallpaperTextColor = mLandscape && !mHeaderImageEnabled;
+        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
     }
 
     private void updateStatusIconAlphaAnimator() {
@@ -790,5 +808,17 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private boolean getChipEnabled() {
         return mMicCameraIndicatorsEnabled || mAllIndicatorsEnabled;
+    }
+
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUS_BAR_CUSTOM_HEADER:
+                mHeaderImageEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateResources();
+                break;
+            default:
+                break;
+        }
     }
 }
