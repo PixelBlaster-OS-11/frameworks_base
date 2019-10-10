@@ -72,7 +72,6 @@ public class DozeParameters implements TunerService.Tunable,
 
         tunerService.addTunable(
                 this,
-                Settings.Secure.DOZE_ALWAYS_ON,
                 Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED);
     }
 
@@ -163,7 +162,7 @@ public class DozeParameters implements TunerService.Tunable,
      * @return {@code true} if enabled and available.
      */
     public boolean getAlwaysOn() {
-        return mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
+        return mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT) ? true : false;
     }
 
     /**
@@ -206,7 +205,12 @@ public class DozeParameters implements TunerService.Tunable,
         return mResources.getBoolean(R.bool.doze_double_tap_reports_touch_coordinates);
     }
 
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+    }
+
     public AlwaysOnDisplayPolicy getPolicy() {
         return mAlwaysOnPolicy;
     }
+
 }
