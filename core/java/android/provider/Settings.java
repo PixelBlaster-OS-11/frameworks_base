@@ -5252,6 +5252,16 @@ public final class Settings {
         public static final String FOD_ICON = "fod_icon";
 
         /**
+         * Set edge gesture Y dead zone
+         * 0 - disabled - stock behavior - default
+         * 1 - smaller top area of the screen
+         * 2 - small top area of the screen
+         * 3 - half top of the screen
+         * @hide
+         */
+        public static final String EDGE_GESTURE_Y_DEAD_ZONE = "edge_gesture_y_dead_zone";
+
+        /**
          * FOD pressed color
          * @hide
          */
