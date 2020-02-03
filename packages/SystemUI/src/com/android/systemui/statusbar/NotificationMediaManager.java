@@ -93,7 +93,7 @@ import dagger.Lazy;
  * Handles tasks and state related to media notifications. For example, there is a 'current' media
  * notification, which this class keeps track of.
  */
-public class NotificationMediaManager implements Dumpable MediaDataManager.Listener {
+    public class NotificationMediaManager implements Dumpable, MediaDataManager.Listener {
     private static final String TAG = "NotificationMediaManager";
     public static final boolean DEBUG_MEDIA = false;
 
