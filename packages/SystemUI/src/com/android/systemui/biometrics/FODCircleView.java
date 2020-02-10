@@ -24,6 +24,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.ContentResolver;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
@@ -32,10 +33,12 @@ import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.net.Uri;
 import android.hardware.biometrics.BiometricSourceType;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.RemoteException;
@@ -220,6 +223,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         @Override
         public void onKeyguardVisibilityChanged(boolean showing) {
             mIsKeyguard = showing;
+            updateStyle();
             if (mFODAnimation != null) {
                 mFODAnimation.setAnimationKeyguard(mIsKeyguard);
             }
@@ -229,6 +233,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         public void onKeyguardBouncerChanged(boolean isBouncer) {
             mIsBouncer = isBouncer;
             if (mUpdateMonitor.isFingerprintDetectionRunning() && !mUpdateMonitor.userNeedsStrongAuth()) {
+            updateStyle();
                 if (isPinOrPattern(mUpdateMonitor.getCurrentUser()) || !isBouncer) {
                     show();
                 } else {
@@ -431,6 +436,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
         mWindowManager.addView(this, mParams);
 
+        mCustomSettingsObserver.observe();
+        mCustomSettingsObserver.update();
         updatePosition();
         hide();
 
@@ -550,6 +557,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        updateStyle();
         updatePosition();
     }
 
@@ -628,10 +636,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mIsCircleShowing = false;
 
         setImageResource(R.drawable.fod_icon_default);
-        if (mFODAnimation != null) {
-            mFODAnimation.setFODAnim();
-        }
-
         invalidate();
 
         ThreadUtils.postOnBackgroundThread(() -> {
@@ -695,6 +699,14 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         ThreadUtils.postOnBackgroundThread(() -> {
             dispatchHide();
         });
+    }
+
+    private void updateStyle() {
+        mIsRecognizingAnimEnabled = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FOD_RECOGNIZING_ANIMATION, 0) != 0;
+        if (mFODAnimation != null) {
+            mFODAnimation.update();
+        }
     }
 
     private void updatePosition() {
@@ -832,6 +844,25 @@ class FODAnimation extends ImageView {
     private AnimationDrawable recognizingAnim;
     private final WindowManager.LayoutParams mAnimParams = new WindowManager.LayoutParams();
 
+    private int mSelectedAnim;
+    private final int[] ANIMATION_STYLES = {
+        R.drawable.fod_miui_normal_recognizing_anim,
+        R.drawable.fod_miui_aod_recognizing_anim,
+        R.drawable.fod_miui_light_recognizing_anim,
+        R.drawable.fod_miui_pop_recognizing_anim,
+        R.drawable.fod_miui_pulse_recognizing_anim,
+        R.drawable.fod_miui_pulse_recognizing_white_anim,
+        R.drawable.fod_miui_rhythm_recognizing_anim,
+        R.drawable.fod_op_cosmos_recognizing_anim,
+        R.drawable.fod_op_mclaren_recognizing_anim,
+        R.drawable.fod_op_stripe_recognizing_anim,
+        R.drawable.fod_op_wave_recognizing_anim,
+        R.drawable.fod_pureview_dna_recognizing_anim,
+        R.drawable.fod_pureview_future_recognizing_anim,
+        R.drawable.fod_pureview_halo_ring_recognizing_anim,
+        R.drawable.fod_pureview_molecular_recognizing_anim
+    };
+
     public FODAnimation(Context context, int mPositionX, int mPositionY) {
         super(context);
 
@@ -852,50 +883,14 @@ class FODAnimation extends ImageView {
         mAnimParams.y = mAnimationPositionY;
 
         this.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        setFODAnim();
-        recognizingAnim = (AnimationDrawable) this.getBackground();
-
+        update();
     }
 
-    public int getFODAnim() {
-        return Settings.System.getInt(mContext.getContentResolver(),
+    public void update() {
+        mSelectedAnim = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.FOD_ANIM, 0);
-    }
 
-    public void setFODAnim() {
-        int fodanim = getFODAnim();
-
-        if (fodanim == 0) {
-            this.setBackgroundResource(R.drawable.fod_miui_normal_recognizing_anim);
-        } else if (fodanim == 1) {
-            this.setBackgroundResource(R.drawable.fod_miui_aod_recognizing_anim);
-        } else if (fodanim == 2) {
-            this.setBackgroundResource(R.drawable.fod_miui_light_recognizing_anim);
-        } else if (fodanim == 3) {
-            this.setBackgroundResource(R.drawable.fod_miui_pop_recognizing_anim);
-        } else if (fodanim == 4) {
-            this.setBackgroundResource(R.drawable.fod_miui_pulse_recognizing_anim);
-        } else if (fodanim == 5) {
-            this.setBackgroundResource(R.drawable.fod_miui_pulse_recognizing_white_anim);
-        } else if (fodanim == 6) {
-            this.setBackgroundResource(R.drawable.fod_miui_rhythm_recognizing_anim);
-        } else if (fodanim == 7) {
-            this.setBackgroundResource(R.drawable.fod_op_cosmos_recognizing_anim);
-        } else if (fodanim == 8) {
-            this.setBackgroundResource(R.drawable.fod_op_mclaren_recognizing_anim);
-        } else if (fodanim == 9) {
-            this.setBackgroundResource(R.drawable.fod_op_stripe_recognizing_anim);
-        } else if (fodanim == 10) {
-            this.setBackgroundResource(R.drawable.fod_op_wave_recognizing_anim);
-        } else if (fodanim == 11) {
-            this.setBackgroundResource(R.drawable.fod_pureview_dna_recognizing_anim);
-        } else if (fodanim == 12) {
-            this.setBackgroundResource(R.drawable.fod_pureview_future_recognizing_anim);
-        } else if (fodanim == 13) {
-            this.setBackgroundResource(R.drawable.fod_pureview_halo_ring_recognizing_anim);
-        } else if (fodanim == 14) {
-            this.setBackgroundResource(R.drawable.fod_pureview_molecular_recognizing_anim);
-        }
+        this.setBackgroundResource(ANIMATION_STYLES[mSelectedAnim]);
         recognizingAnim = (AnimationDrawable) this.getBackground();
     }
 
