@@ -24,6 +24,7 @@ import static android.provider.settings.validators.SettingsValidators.LENIENT_IP
 import static android.provider.settings.validators.SettingsValidators.NON_NEGATIVE_INTEGER_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.URI_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.VIBRATION_INTENSITY_VALIDATOR;
+import static android.provider.settings.validators.SettingsValidators.ANY_STRING_VALIDATOR;
 
 import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
@@ -235,9 +236,10 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.SCREENSHOT_SOUND, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VOLUME_ROCKER_WAKE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.USE_OLD_MOBILETYPE, BOOLEAN_VALIDATOR);
-        VALIDATORS.put(System.RINGTONE_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 4));
+        VALIDATORS.put(System.RINGTONE_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 5));
         VALIDATORS.put(System.VIBRATE_ON_CONNECT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VIBRATE_ON_CALLWAITING, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VIBRATE_ON_DISCONNECT, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.CUSTOM_RINGTONE_VIBRATION_PATTERN, ANY_STRING_VALIDATOR);
     }
 }
