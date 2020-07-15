@@ -86,4 +86,7 @@
     <string name="applock_credential">&#160;to unlock</string>
     <string name="applock_unlock">Unlock</string>
 
+    <!-- Tux clock -->
+    <string name="clock_title_tux" translatable="false">Tux</string>
+
 </resources>
