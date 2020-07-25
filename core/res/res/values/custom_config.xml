@@ -210,4 +210,8 @@
     <string name="config_alertSliderIntent"></string>
 
     <integer name="config_ambientNotificationDefaultColor">0xFF3980FF</integer>
+
+    <!-- Defines the sysfs attribute path used by the device
+         to enable/disable DC dimming. -->
+    <string name="config_deviceDcDimmingSysfsNode"></string>    
 </resources>

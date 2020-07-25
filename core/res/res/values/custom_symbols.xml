@@ -127,4 +127,6 @@
     <!-- Ambient notification light color -->
     <java-symbol type="integer" name="config_ambientNotificationDefaultColor" />
 
+    <!-- DC Dimming -->
+    <java-symbol type="string" name="config_deviceDcDimmingSysfsNode" />
 </resources>
