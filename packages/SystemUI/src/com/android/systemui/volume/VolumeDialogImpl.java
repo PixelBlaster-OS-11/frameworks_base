@@ -127,7 +127,7 @@ import java.util.List;
  * Methods ending in "H" must be called on the (ui) handler.
  */
 public class VolumeDialogImpl implements VolumeDialog,
-        ConfigurationController.ConfigurationListener, OnLongClickListener {
+        ConfigurationController.ConfigurationListener {
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
@@ -239,9 +239,6 @@ public class VolumeDialogImpl implements VolumeDialog,
     private void initDialog() {
         int land_margin = (int) mContext.getResources().getDimension(
                 R.dimen.volume_dialog_panel_land_margin);
-
-        // Gravitate various views left/right depending on panel placement setting.
-        final int panelGravity = mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
 
         // Gravitate various views left/right depending on panel placement setting.
         final int panelGravity = mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
@@ -561,16 +558,22 @@ public class VolumeDialogImpl implements VolumeDialog,
                     Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
     }
 
+    private void setVisOrGone(int stream, boolean vis) {
+        if (!vis && stream == mAllyStream) {
+            return;
+        }
+        Util.setVisOrGone(findRow(stream).view, vis);
+    }
+
     private void updateExpandedRows(boolean expand) {
         if (!expand) mController.setActiveStream(mAllyStream);
         if (mMusicHidden) {
-            Util.setVisOrGone(findRow(AudioManager.STREAM_MUSIC).view, expand);
+            setVisOrGone(AudioManager.STREAM_MUSIC, expand);
         }
-        Util.setVisOrGone(findRow(AudioManager.STREAM_RING).view, expand);
-        Util.setVisOrGone(findRow(STREAM_ALARM).view, expand);
+        setVisOrGone(AudioManager.STREAM_RING, expand);
+        setVisOrGone(STREAM_ALARM, expand);
         if (!isNotificationStreamLinked()) {
-            Util.setVisOrGone(
-                    findRow(AudioManager.STREAM_NOTIFICATION).view, expand);
+            setVisOrGone(AudioManager.STREAM_NOTIFICATION, expand);
         }
     }
 
