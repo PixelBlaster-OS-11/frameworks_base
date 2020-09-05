@@ -98,6 +98,8 @@
     <dimen name="ticker_start_padding">6dp</dimen>
     <dimen name="ticker_top_padding">2dp</dimen>    
     <dimen name="ticker_icon_end_margin">4dp</dimen>
-    <dimen name="ticker_text_end_padding">10dp</dimen>    
+    <dimen name="ticker_text_end_padding">10dp</dimen>
 
+    <!-- Per app volume -->
+    <dimen name="volume_row_app_icon_padding">8dp</dimen>        
 </resources>
