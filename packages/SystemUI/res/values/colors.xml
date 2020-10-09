@@ -282,4 +282,9 @@
     <color name="qs_tile_oos">#FFFFFF</color>
 
     <color name="qs_tile_icon_oos">#909090</color>
+
+    <!-- Clear all notifications button -->
+    <color name="dismiss_all_background_color">@android:color/white</color>
+    <color name="dismiss_all_background_color_ripple">#a8a8a8</color>
+    <color name="dismiss_all_icon_color">#8a000000</color>    
 </resources>
