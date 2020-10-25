@@ -164,4 +164,6 @@ interface IStatusBarService
      * DerpFest
      */
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
 }
