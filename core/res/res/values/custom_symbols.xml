@@ -112,4 +112,6 @@
      <!-- Light / Regular style fonts -->
      <java-symbol type="string" name="config_lightFontFamily" />
 
+    <!-- Default fod pressed icon -->
+    <java-symbol type="integer" name="config_fod_pressed_color" />
 </resources>

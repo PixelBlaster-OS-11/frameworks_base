@@ -195,4 +195,7 @@
 
     <string name="config_lightFontFamily" translatable="false">sans-serif</string>
 
+    <!-- Default fod pressed color -->
+    <integer name="config_fod_pressed_color">1</integer>
+
 </resources>
