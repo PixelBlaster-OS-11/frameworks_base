@@ -5677,6 +5677,13 @@ public final class Settings {
          */
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
+
+        /**
+         * Weather an oos like  qs clock should be shown
+         * @hide
+         */
+        public static final String OOS_QSCLOCK = "oos_qsclock";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
