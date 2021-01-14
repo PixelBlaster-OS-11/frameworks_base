@@ -10032,6 +10032,13 @@ public final class Settings {
          */
         public static final String WINDOW_MAGNIFICATION = "window_magnification";
 
+
+        /**
+         * Whether to show QS brightness slider on bottom
+         * @hide
+         */
+        public static final String QS_BRIGHTNESS_POSITION_BOTTOM = "qs_brightness_position_bottom";
+
         /**
          * Controls magnification mode when magnification is enabled via a system-wide
          * triple tap gesture or the accessibility shortcut.
