@@ -26,7 +26,8 @@ public class AccentUtils {
                     "settingsHeaderColor",
                     "settings_accent_color",
                     "oneplus_accent_color",
-                    "op_control_accent_color_green",                                        
+                    "op_control_accent_color_green",
+                    "dismiss_all_icon_color",                                                            
                     "gradient_start"));
 
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
