@@ -78,4 +78,7 @@
     <string name="qs_menu_item_columns_nine">9</string>
     <string name="qs_menu_item_reset">Reset</string>
 
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
+
 </resources>
