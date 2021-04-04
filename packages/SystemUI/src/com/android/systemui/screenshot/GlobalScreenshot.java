@@ -50,6 +50,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.media.MediaActionSound;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -212,7 +214,7 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
     private float mCornerSizeX;
     private float mDismissDeltaY;
 
-    private MediaActionSound mCameraSound;
+    private Ringtone mScreenshotSound;
     private AudioManager mAudioManager;
     private Vibrator mVibrator;
 
@@ -283,9 +285,9 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         mFastOutSlowIn =
                 AnimationUtils.loadInterpolator(mContext, android.R.interpolator.fast_out_slow_in);
 
-        // Setup the Camera shutter sound
-        mCameraSound = new MediaActionSound();
-        mCameraSound.load(MediaActionSound.SHUTTER_CLICK);
+        // Setup the Screenshot sound
+        mScreenshotSound = RingtoneManager.getRingtone(mContext,
+                    Uri.parse("file://" + "/product/media/audio/ui/camera_click.ogg"));
 
         // Grab system services needed for screenshot sound
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
@@ -1151,7 +1153,11 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         // We want to play the shutter sound when it's either forced or
         // when we use normal ringer mode
         if (playSound) {
-            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+            if (Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 1) {
+                if (mScreenshotSound != null) {
+                    mScreenshotSound.play();
+                }
+            }
         }
     }
 
