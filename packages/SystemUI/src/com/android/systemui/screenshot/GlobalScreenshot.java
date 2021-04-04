@@ -60,6 +60,7 @@ import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -1153,11 +1154,31 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         // We want to play the shutter sound when it's either forced or
         // when we use normal ringer mode
         if (playSound) {
-            if (Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 1) {
-                if (mScreenshotSound != null) {
-                    mScreenshotSound.play();
-                }
-            }
+                mScreenshotLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (mAudioManager.getRingerMode()) {
+                            case AudioManager.RINGER_MODE_SILENT:
+                                // do nothing
+                                break;
+                            case AudioManager.RINGER_MODE_VIBRATE:
+                                if (mVibrator != null && mVibrator.hasVibrator()) {
+                                    mVibrator.vibrate(VibrationEffect.createOneShot(50,
+                                            VibrationEffect.DEFAULT_AMPLITUDE));
+                                }
+                                break;
+                            case AudioManager.RINGER_MODE_NORMAL:
+                                // Play the shutter sound to notify that we've taken a screenshot
+                                if (Settings.System.getInt(mContext.getContentResolver(),
+                                        Settings.System.SCREENSHOT_SOUND, 1) == 1) {
+                                    if (mScreenshotSound != null) {
+                                        mScreenshotSound.play();
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                });
         }
     }
 
