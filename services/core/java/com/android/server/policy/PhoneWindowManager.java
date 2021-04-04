@@ -2145,17 +2145,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mWindowManagerFuncs.onKeyguardShowingAndNotOccludedChanged();
                     }
                 });
-     private void enableSwipeThreeFingerGesture(boolean enable){
-        if (enable) {
-            if (haveEnableGesture) return;
-            haveEnableGesture = true;
-            mWindowManagerFuncs.registerPointerEventListener(mOPGestures, DEFAULT_DISPLAY);
-        } else {
-            if (!haveEnableGesture) return;
-            haveEnableGesture = false;
-            mWindowManagerFuncs.unregisterPointerEventListener(mOPGestures, DEFAULT_DISPLAY);
-        }
-    }
 
         final String[] deviceKeyHandlerLibs = res.getStringArray(
                 com.android.internal.R.array.config_deviceKeyHandlerLibs);
@@ -2178,6 +2167,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         if (DEBUG_INPUT) {
             Slog.d(TAG, "" + mDeviceKeyHandlers.size() + " device key handlers loaded");
+        }
+    }
+
+     private void enableSwipeThreeFingerGesture(boolean enable){
+        if (enable) {
+            if (haveEnableGesture) return;
+            haveEnableGesture = true;
+            mWindowManagerFuncs.registerPointerEventListener(mOPGestures, DEFAULT_DISPLAY);
+        } else {
+            if (!haveEnableGesture) return;
+            haveEnableGesture = false;
+            mWindowManagerFuncs.unregisterPointerEventListener(mOPGestures, DEFAULT_DISPLAY);
         }
     }
 
