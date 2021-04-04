@@ -4795,6 +4795,12 @@ public final class Settings {
         public static final String SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
+         * Whether to show the battery info on the lockscreen while charging
+         * @hide
+         */
+        public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
+
+        /**
          * Three Finger Gesture from Oppo
          * @hide
          */
