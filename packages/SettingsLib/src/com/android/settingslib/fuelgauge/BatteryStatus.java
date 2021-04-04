@@ -67,7 +67,7 @@ public class BatteryStatus {
         this.maxChargingCurrent = maxChargingCurrent;
         this.maxChargingVoltage = maxChargingVoltage;
         this.maxChargingWattage = maxChargingWattage;
-        this.oemFastChargeStatus = oemFastChargeStatus
+        this.oemFastChargeStatus = oemFastChargeStatus;
         this.temperature = temperature;;
     }
 
