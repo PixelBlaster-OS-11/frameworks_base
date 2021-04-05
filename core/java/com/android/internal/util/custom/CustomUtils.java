@@ -39,6 +39,7 @@ import android.os.SystemProperties;
 import android.util.DisplayMetrics;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
+import android.text.TextUtils;
 
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
