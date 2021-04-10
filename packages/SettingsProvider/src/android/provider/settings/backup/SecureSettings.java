@@ -170,6 +170,7 @@ public class SecureSettings {
         Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED,
         Settings.Secure.ASSIST_HANDLES_LEARNING_TIME_ELAPSED_MILLIS,
         Settings.Secure.ASSIST_HANDLES_LEARNING_EVENT_COUNT,
-        Settings.Secure.VOLUME_LINK_NOTIFICATION
+        Settings.Secure.VOLUME_LINK_NOTIFICATION,
+        Settings.Secure.TORCH_POWER_BUTTON_GESTURE
     };
 }
