@@ -95,5 +95,6 @@ public class SystemSettings {
         Settings.System.VIBRATE_ON_DISCONNECT,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
         Settings.System.QS_MEDIA_PLAYER,
+        Settings.System.LOCKSCREEN_MEDIA_ART,
     };
 }

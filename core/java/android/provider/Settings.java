@@ -4838,6 +4838,11 @@ public final class Settings {
         public static final String SCREENSHOT_SOUND = "screenshot_sound";
 
         /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_ART = "lockscreen_media_art";
+
+        /**
          * Whether or not to enable multiple audio focus.
          * When enabled, requires more management by user over application playback activity,
          * for instance pausing media apps when another starts.
@@ -5250,6 +5255,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(VIBRATE_ON_CONNECT);
             PRIVATE_SETTINGS.add(VIBRATE_ON_CALLWAITING);
             PRIVATE_SETTINGS.add(VIBRATE_ON_DISCONNECT);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_ART);
         }
 
         /**
