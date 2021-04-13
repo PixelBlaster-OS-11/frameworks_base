@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Outline;
@@ -90,6 +91,9 @@ import com.android.internal.logging.UiEventLogger;
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.shared.system.QuickStepContract;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -594,6 +598,15 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         }
 
         mScreenBitmap = screenshot;
+
+        int imageCompression = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREENSHOT_COMPRESSION, 100, UserHandle.USER_CURRENT);
+
+        if (imageCompression < 100) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            mScreenBitmap.compress(Bitmap.CompressFormat.JPEG, imageCompression, out);
+            mScreenBitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+        }
 
         if (mScreenBitmap == null) {
             mNotificationsController.notifyScreenshotError(
