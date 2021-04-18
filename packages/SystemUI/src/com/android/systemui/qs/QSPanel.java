@@ -37,7 +37,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.android.internal.logging.MetricsLogger;
@@ -103,7 +103,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     @Nullable
     protected View mBrightnessView;
-    protected ImageView mAutoBrightnessView;
+    protected ImageButton mAutoBrightnessView;
     @Nullable
     private BrightnessController mBrightnessController;
 
