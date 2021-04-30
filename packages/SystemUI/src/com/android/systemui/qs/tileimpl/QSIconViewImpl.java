@@ -27,6 +27,7 @@ import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Animatable2.AnimationCallback;
 import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Settings.System;
 import android.view.View;
 import android.widget.ImageView;
@@ -182,7 +183,7 @@ public class QSIconViewImpl extends QSIconView {
         }
 
         boolean setQsUseNewTint = System.getIntForUser(getContext().getContentResolver(),
-                     System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
+                     System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT) == 1;
 
         if (mAnimationEnabled && ValueAnimator.areAnimatorsEnabled()) {
             final float fromAlpha = Color.alpha(fromColor);
