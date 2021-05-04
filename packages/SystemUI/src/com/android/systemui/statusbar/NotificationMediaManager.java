@@ -41,6 +41,7 @@ import android.os.UserHandle;
 import android.provider.DeviceConfig;
 import android.provider.DeviceConfig.Properties;
 import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
@@ -431,11 +432,12 @@ import dagger.Lazy;
     public void findAndUpdateMediaNotifications() {
         boolean metaDataChanged = false;
 
+        // Promote the media notification with a controller in 'playing' state, if any.
+        NotificationEntry mediaNotification = null;
+
         synchronized (mEntryManager) {
             Collection<NotificationEntry> allNotifications = mEntryManager.getAllNotifs();
 
-            // Promote the media notification with a controller in 'playing' state, if any.
-            NotificationEntry mediaNotification = null;
             MediaController controller = null;
             for (NotificationEntry entry : allNotifications) {
                 if (entry.isMediaNotification()) {
@@ -514,6 +516,17 @@ import dagger.Lazy;
 
         if (metaDataChanged) {
             mEntryManager.updateNotifications("NotificationMediaManager - metaDataChanged");
+            if (PlaybackState.STATE_PLAYING ==
+                    getMediaControllerPlaybackState(mMediaController) &&
+                    mStatusBarLazy.get().isMusicTickerEnabled() &&
+                    mediaNotification != null && mMediaMetadata != null) {
+                StatusBarNotification entry = mediaNotification.getSbn();
+                mMainExecutor.executeDelayed(() -> {
+                    mStatusBarLazy.get().tick(entry, true, true, mMediaMetadata, null);
+                }, 600);
+            } else {
+                mStatusBarLazy.get().resetTrackInfo();
+            }
         }
 
         dispatchUpdateMediaMetaData(metaDataChanged, true /* allowEnterAnimation */);
