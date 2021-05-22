@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2019 The Android Open Source Project
  * Copyright (C) 2020 ProjectFluid
- * Copyright (C) 2021 NezukoOS 
+ * Copyright (C) 2021 NezukoOS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -180,6 +181,15 @@ public class Fluidv2ClockController implements ClockPlugin {
         mTimeClock.setTextColor(color);
         mDay.setTextColor(color);
         mYear.setTextColor(color);
+    }
+
+    public void setTypeface(Typeface tf) {
+        mTimeClock.setTypeface(tf);
+        mDay.setTypeface(tf);
+        mYear.setTypeface(tf);
+    }
+
+    public void setDateTypeface(Typeface tf) {
     }
 
     @Override
