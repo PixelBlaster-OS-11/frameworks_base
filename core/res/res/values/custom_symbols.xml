@@ -106,4 +106,7 @@
     <!-- Toast animation -->
     <java-symbol type="style" name="Animation.Toast.Material" />
 
+     <!-- Light / Regular style fonts -->
+     <java-symbol type="string" name="config_lightFontFamily" />
+
 </resources>

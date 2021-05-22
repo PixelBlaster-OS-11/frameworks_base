@@ -190,4 +190,6 @@
     <!-- Screen off delay -->
     <integer name="config_screen_off_delay">0</integer>
 
+    <string name="config_lightFontFamily" translatable="false">sans-serif</string>
+
 </resources>
