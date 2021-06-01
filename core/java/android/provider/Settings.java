@@ -5555,6 +5555,11 @@ public final class Settings {
                 "status_bar_ticker_tick_duration";
 
         /**
+         * @hide
+         */
+        public static final String STYLE_OVERLAY_SETTINGS_CARDS = "style_overlay_settings_cards";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
