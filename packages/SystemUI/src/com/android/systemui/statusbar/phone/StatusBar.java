@@ -948,11 +948,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 SysuiStatusBarStateController.RANK_STATUS_BAR);
 
         mTunerService.addTunable(this, NAVIGATION_BAR_SHOW);
-        tunerService.addTunable(this, STATUS_BAR_SHOW_TICKER);
-        tunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
-        tunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
-
-        mDisplayManager = mContext.getSystemService(DisplayManager.class);
+        mTunerService.addTunable(this, STATUS_BAR_SHOW_TICKER);
+        mTunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
+        mTunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mDreamManager = IDreamManager.Stub.asInterface(
