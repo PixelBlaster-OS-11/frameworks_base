@@ -415,7 +415,7 @@ public class DozeTriggers implements DozeMachine.Part {
                 mBroadcastReceiver.unregister(mBroadcastDispatcher);
                 mDozeHost.removeCallback(mHostCallback);
                 mDockManager.removeListener(mDockEventListener);
-                mDozeSensors.setListening(false, false);
+                mDozeSensors.setListening(false);
                 mDozeSensors.setProxListening(false);
                 mWantSensors = false;
                 mWantProx = false;
@@ -423,7 +423,6 @@ public class DozeTriggers implements DozeMachine.Part {
                 break;
             default:
         }
-        mDozeSensors.setListening(mWantSensors, mWantTouchScreenSensors);
     }
 
     @Override
@@ -432,7 +431,6 @@ public class DozeTriggers implements DozeMachine.Part {
         mDozeSensors.setProxListening(mWantProx && (state == Display.STATE_DOZE
                 || state == Display.STATE_DOZE_SUSPEND
                 || state == Display.STATE_OFF));
-        mDozeSensors.setListening(mWantSensors, mWantTouchScreenSensors);
     }
 
     private void checkTriggersAtInit() {

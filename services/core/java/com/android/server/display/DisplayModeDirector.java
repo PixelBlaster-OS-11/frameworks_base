@@ -1328,11 +1328,6 @@ public class DisplayModeDirector {
             if (insideZone) {
                 vote = Vote.forRefreshRates(mRefreshRateInZone, mRefreshRateInZone);
             }
-
-            if (DEBUG) {
-                Slog.d(TAG, "Display brightness " + brightness + ", ambient lux " +  mAmbientLux +
-                        ", Vote " + vote);
-            }
             updateVoteLocked(Vote.PRIORITY_LOW_BRIGHTNESS, vote);
         }
 

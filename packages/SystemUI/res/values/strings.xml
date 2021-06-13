@@ -2883,4 +2883,13 @@
     <string name="quick_settings_sound_vibrate">Vibrate</string>
     <string name="quick_settings_sound_dnd">Do not disturb</string>
 
+    <!-- Title to display in a notification when ACTION_BATTERY_CHANGED.EXTRA_PRESENT field is false
+    [CHAR LIMIT=NONE] -->
+    <string name="battery_state_unknown_notification_title">Problem reading your battery meter</string>
+    <!-- Text to display in a notification when ACTION_BATTERY_CHANGED.EXTRA_PRESENT field is false
+    [CHAR LIMIT=NONE] -->
+    <string name="battery_state_unknown_notification_text">Tap for more information</string>
+    <!-- content URL in a notification when ACTION_BATTERY_CHANGED.EXTRA_PRESENT field is false -->
+    <string translatable="false" name="config_batteryStateUnknownUrl"></string>    
+
 </resources>

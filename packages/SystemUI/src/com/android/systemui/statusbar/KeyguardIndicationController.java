@@ -124,7 +124,6 @@ public class KeyguardIndicationController implements StateListener,
     private int mChargingSpeed;
     private double mChargingWattage;
     private int mBatteryLevel;
-    private boolean mBatteryPresent = true;
     private long mChargingTimeRemaining;
     private float mDisclosureMaxAlpha;
     private int mChargingCurrent;
@@ -396,12 +395,36 @@ public class KeyguardIndicationController implements StateListener,
             mWakeLock.setAcquired(false);
         }
 
-        if (!mVisible) {
-            return;
-        }
+        if (mVisible) {
+            // Walk down a precedence-ordered list of what indication
+            // should be shown based on user or device state
+            if (mDozing) {
+                // When dozing we ignore any text color and use white instead, because
+                // colors can be hard to read in low brightness.
+                mTextView.setTextColor(Color.WHITE);
+                if (!TextUtils.isEmpty(mTransientIndication)) {
+                    mTextView.switchIndication(mTransientIndication);
+                } else if (!TextUtils.isEmpty(mAlignmentIndication)) {
+                    mTextView.switchIndication(mAlignmentIndication);
+                    mTextView.setTextColor(mContext.getColor(R.color.misalignment_text_color));
+                } else if (mPowerPluggedIn || mEnableBatteryDefender) {
+                    String indication = computePowerIndication();
+                    if (animate) {
+                        animateText(mTextView, indication);
+                    } else {
+                        mTextView.switchIndication(indication);
+                    }
+                } else {
+                    String percentage = NumberFormat.getPercentInstance()
+                            .format(mBatteryLevel / 100f);
+                    mTextView.switchIndication(percentage);
+                }
+                return;
+            }
 
-        // A few places might need to hide the indication, so always start by making it visible
-        mIndicationArea.setVisibility(View.VISIBLE);
+            int userId = KeyguardUpdateMonitor.getCurrentUser();
+            String trustGrantedIndication = getTrustGrantedIndication();
+            String trustManagedIndication = getTrustManagedIndication();
 
             String powerIndication = null;
             if (mPowerPluggedIn || mEnableBatteryDefender) {
@@ -426,83 +449,25 @@ public class KeyguardIndicationController implements StateListener,
                 }
             } else if (!TextUtils.isEmpty(mAlignmentIndication)) {
                 mTextView.switchIndication(mAlignmentIndication);
-                mTextView.setTextColor(mContext.getColor(R.color.misalignment_text_color));
+                isError = true;
             } else if (mPowerPluggedIn || mEnableBatteryDefender) {
-                String indication = computePowerIndication();
-                if (animate) {
-                    animateText(mTextView, indication);
-                } else {
-                    mTextView.switchIndication(indication);
+                if (DEBUG_CHARGING_SPEED) {
+                    powerIndication += ",  " + (mChargingWattage / 1000) + " mW";
                 }
+                if (animate) {
+                    animateText(mTextView, powerIndication);
+                } else {
+                    mTextView.switchIndication(powerIndication);
+                }
+            } else if (!TextUtils.isEmpty(trustManagedIndication)
+                    && mKeyguardUpdateMonitor.getUserTrustIsManaged(userId)
+                    && !mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
+                mTextView.switchIndication(trustManagedIndication);
             } else {
-                String percentage = NumberFormat.getPercentInstance()
-                        .format(mBatteryLevel / 100f);
-                mTextView.switchIndication(percentage);
+                mTextView.switchIndication(mRestingIndication);
             }
-            return;
-        }
-
-        int userId = KeyguardUpdateMonitor.getCurrentUser();
-        String trustGrantedIndication = getTrustGrantedIndication();
-        String trustManagedIndication = getTrustManagedIndication();
-
-        String powerIndication = null;
-        if (mPowerPluggedIn || mEnableBatteryDefender) {
-            powerIndication = computePowerIndication();
-        }
-
-        // Some cases here might need to hide the indication (if the battery is not present)
-        boolean hideIndication = false;
-        boolean isError = false;
-        if (!mKeyguardUpdateMonitor.isUserUnlocked(userId)) {
-            mTextView.switchIndication(com.android.internal.R.string.lockscreen_storage_locked);
-        } else if (!TextUtils.isEmpty(mTransientIndication)) {
-            if (powerIndication != null && !mTransientIndication.equals(powerIndication)) {
-                String indication = mContext.getResources().getString(
-                                R.string.keyguard_indication_trust_unlocked_plugged_in,
-                                mTransientIndication, powerIndication);
-                mTextView.switchIndication(indication);
-                hideIndication = !mBatteryPresent;
-            } else {
-                mTextView.switchIndication(mTransientIndication);
-            }
-            isError = mTransientTextIsError;
-        } else if (!TextUtils.isEmpty(trustGrantedIndication)
-                && mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
-            if (powerIndication != null) {
-                String indication = mContext.getResources().getString(
-                                R.string.keyguard_indication_trust_unlocked_plugged_in,
-                                trustGrantedIndication, powerIndication);
-                mTextView.switchIndication(indication);
-                hideIndication = !mBatteryPresent;
-            } else {
-                mTextView.switchIndication(trustGrantedIndication);
-            }
-        } else if (!TextUtils.isEmpty(mAlignmentIndication)) {
-            mTextView.switchIndication(mAlignmentIndication);
-            isError = true;
-            hideIndication = !mBatteryPresent;
-        } else if (mPowerPluggedIn || mEnableBatteryDefender) {
-            if (DEBUG_CHARGING_SPEED) {
-                powerIndication += ",  " + (mChargingWattage / 1000) + " mW";
-            }
-            if (animate) {
-                animateText(mTextView, powerIndication);
-            } else {
-                mTextView.switchIndication(powerIndication);
-            }
-            hideIndication = !mBatteryPresent;
-        } else if (!TextUtils.isEmpty(trustManagedIndication)
-                && mKeyguardUpdateMonitor.getUserTrustIsManaged(userId)
-                && !mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
-            mTextView.switchIndication(trustManagedIndication);
-        } else {
-            mTextView.switchIndication(mRestingIndication);
-        }
-        mTextView.setTextColor(isError ? Utils.getColorError(mContext)
-                : mInitialTextColorState);
-        if (hideIndication) {
-            mIndicationArea.setVisibility(View.GONE);
+            mTextView.setTextColor(isError ? Utils.getColorError(mContext)
+                    : mInitialTextColorState);
         }
     }
 
@@ -719,7 +684,6 @@ public class KeyguardIndicationController implements StateListener,
         pw.println("  mMessageToShowOnScreenOn: " + mMessageToShowOnScreenOn);
         pw.println("  mDozing: " + mDozing);
         pw.println("  mBatteryLevel: " + mBatteryLevel);
-        pw.println("  mBatteryPresent: " + mBatteryPresent);
         pw.println("  mTextView.getText(): " + (mTextView == null ? null : mTextView.getText()));
         pw.println("  computePowerIndication(): " + computePowerIndication());
     }
@@ -763,7 +727,6 @@ public class KeyguardIndicationController implements StateListener,
             mBatteryLevel = status.level;
             mBatteryOverheated = status.isOverheated();
             mEnableBatteryDefender = mBatteryOverheated && status.isPluggedIn();
-            mBatteryPresent = status.present;
             try {
                 mChargingTimeRemaining = mPowerPluggedIn
                         ? mBatteryInfo.computeChargeTimeRemaining() : -1;
