@@ -4512,7 +4512,7 @@ public class PackageManagerService extends IPackageManager.Stub
             if (permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")
                     && p.getTargetSdkVersion() > Build.VERSION_CODES.LOLLIPOP_MR1
                     && android.provider.Settings.Global.getInt(mContext.getContentResolver(),
-                       android.provider.Settings.Global.ALLOW_SIGNATURE_FAKE, 0) == 1
+                       android.provider.Settings.Global.ALLOW_SIGNATURE_FAKE, 1) == 1
                     && p.getMetaData() != null) {
                 String sig = p.getMetaData().getString("fake-signature");
                 if (sig != null) {
