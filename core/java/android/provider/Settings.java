@@ -5560,6 +5560,11 @@ public final class Settings {
         public static final String STYLE_OVERLAY_SETTINGS_CARDS = "style_overlay_settings_cards";
 
         /**
+         * @hide
+         */
+        public static final String STYLE_OVERLAY_SETTINGS_DASHBOARD_ICONS = "style_overlay_settings_dashboard_icons";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

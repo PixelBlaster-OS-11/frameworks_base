@@ -72,6 +72,7 @@ LOCAL_REQUIRED_MODULES := \
         SettingsCardInvisible \
         SettingsCardElevation \
         SettingsIntellCardElevation \
+        SettingsDashAOSP \
 	preinstalled-packages-platform-overlays.xml
 
 include $(BUILD_PHONY_PACKAGE)
