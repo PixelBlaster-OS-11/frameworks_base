@@ -5238,13 +5238,6 @@ public final class Settings {
          */
         public static final String QS_TILE_STYLE = "qs_tile_style";
 
-
-        /**
-         * Holds current enabled volume panel implementation
-         * @hide
-         */
-        public static final String SYSTEMUI_PLUGIN_VOLUME = "systemui_plugin_volume";
-
         /**
          * FOD icon picker
          * @hide
@@ -5723,7 +5716,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNI_QS_LAYOUT_COLUMNS);
             PRIVATE_SETTINGS.add(OMNI_QS_TILE_TITLE_VISIBILITY);
             PRIVATE_SETTINGS.add(QS_TILE_STYLE);
-            PRIVATE_SETTINGS.add(SYSTEMUI_PLUGIN_VOLUME);
             PRIVATE_SETTINGS.add(FOD_GESTURE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_STYLE);

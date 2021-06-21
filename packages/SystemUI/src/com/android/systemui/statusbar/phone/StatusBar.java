@@ -595,8 +595,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final NotificationRemoteInputManager mRemoteInputManager;
     private boolean mWallpaperSupported;
 
-    private VolumePluginManager mVolumePluginManager;
-
     private PulseController mPulseController;
     private VisualizerView mVisualizerView;
 
@@ -978,8 +976,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         mWallpaperSupported =
                 mContext.getSystemService(WallpaperManager.class).isWallpaperSupported();
-
-        mVolumePluginManager = new VolumePluginManager(mContext, mHandler);
 
         // Connect in to the status bar manager service
         mCommandQueue.addCallback(this);
