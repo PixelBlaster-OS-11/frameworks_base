@@ -42,7 +42,6 @@ import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
-import com.android.systemui.qs.tiles.KillappTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.MonoToggleTile;
 import com.android.systemui.qs.tiles.NfcTile;
@@ -100,7 +99,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<MonoToggleTile> mMonoToggleTileProvider;
     private final Provider<DcDimmingTile> mDcDimmingTileProvider;
-    private final Provider<KillappTile> mKillappTileProvider;
     private final Provider<HeadsUpTile> mHeadsUpTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
 
@@ -136,7 +134,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MonoToggleTile> monoToggleTileProvider,
             Provider<DcDimmingTile> dcDimTileProvider,
-            Provider<KillappTile> killappTileProvider,
             Provider<HeadsUpTile> headsUpTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider) {
         mQsHostLazy = qsHostLazy;
@@ -170,7 +167,6 @@ public class QSFactoryImpl implements QSFactory {
         mSoundSearchTileProvider = soundSearchTileProvider;
         mMonoToggleTileProvider = monoToggleTileProvider;
         mDcDimmingTileProvider = dcDimTileProvider;
-        mKillappTileProvider = killappTileProvider;
         mHeadsUpTileProvider = headsUpTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
     }
@@ -241,8 +237,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mMonoToggleTileProvider.get();
             case "dc_dimming":
                 return mDcDimmingTileProvider.get();
-            case "killapp":
-                return mKillappTileProvider.get();
             case "heads_up":
                 return mHeadsUpTileProvider.get();
             case "gaming":
