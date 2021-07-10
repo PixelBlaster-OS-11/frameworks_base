@@ -22,11 +22,7 @@ public class AccentUtils {
                     "dialer_theme_color",
                     "dialer_theme_color_dark",
                     "dialer_theme_color_20pct",
-                    "colorAccent",
-                    "settingsHeaderColor",
-                    "settings_accent_color",
-                    "oneplus_accent_color",
-                    "op_control_accent_color_green",                                        
+                    "colorAccent",                    
                     "gradient_start"));
 
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
