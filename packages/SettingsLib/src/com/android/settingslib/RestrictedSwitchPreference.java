@@ -118,9 +118,9 @@ public class RestrictedSwitchPreference extends SwitchPreference {
 
         final ImageView icon = holder.itemView.findViewById(android.R.id.icon);
 
-        if (mIconSize > 0) {
-            icon.setLayoutParams(new LinearLayout.LayoutParams(mIconSize, mIconSize));
-        }
+//        if (mIconSize > 0) {
+//            icon.setLayoutParams(new LinearLayout.LayoutParams(mIconSize, mIconSize));
+//        }
 
         if (mUseAdditionalSummary) {
             final TextView additionalSummaryView = (TextView) holder.findViewById(
