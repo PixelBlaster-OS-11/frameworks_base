@@ -191,7 +191,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         R.drawable.fod_icon_pressed_green,
         R.drawable.fod_icon_pressed_yellow
     };
-
+    
     private IFingerprintInscreenCallback mFingerprintInscreenCallback =
             new IFingerprintInscreenCallback.Stub() {
         @Override
@@ -252,6 +252,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
             if (mIsKeyguard && mUpdateMonitor.isFingerprintDetectionRunning()) {
                 show();
+                updateStyle();
+                updatePosition();
                 updateIconDim(false);
             } else {
                 hide();
@@ -271,6 +273,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         public void onKeyguardVisibilityChanged(boolean showing) {
             mIsKeyguard = showing;
             updateStyle();
+            updatePosition();
             if (mFODAnimation != null) {
                 mFODAnimation.setAnimationKeyguard(mIsKeyguard);
             }
@@ -281,8 +284,11 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             mIsBouncer = isBouncer;
             if (mUpdateMonitor.isFingerprintDetectionRunning() && !mUpdateMonitor.userNeedsStrongAuth()) {
             updateStyle();
+            updatePosition();
                 if (isPinOrPattern(mUpdateMonitor.getCurrentUser()) || !isBouncer) {
                     show();
+                    updateStyle();
+                    updatePosition();
                 } else {
                     hide();
                 }
@@ -315,14 +321,20 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         @Override
         public void onStartedWakingUp() {
             if (mUpdateMonitor.isFingerprintDetectionRunning()) {
+                updateStyle();
+                updatePosition();
                 show();
+
             }
         }
 
         @Override
         public void onScreenTurnedOn() {
+            updateStyle();
+            updatePosition();
             if (!mFodGestureEnable && mUpdateMonitor.isFingerprintDetectionRunning()) {
                 show();
+                updateStyle();
             }
             if (mFodGestureEnable && mPressPending) {
                 mHandler.post(() -> showCircle());
@@ -572,6 +584,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     protected void onDraw(Canvas canvas) {
         if (!mIsCircleShowing) {
             canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprintBackground);
+            updateStyle();
+            updatePosition();
         }
         super.onDraw(canvas);
     }
@@ -608,6 +622,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         updateStyle();
         updatePosition();
     }
+    
 
     public IFingerprintInscreen getFingerprintInScreenDaemon() {
         if (mFingerprintInscreenDaemon == null) {
@@ -646,6 +661,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     }
 
     public void dispatchShow() {
+        updateStyle();
+        updatePosition();
         IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
         try {
             daemon.onShowFODView();
@@ -699,6 +716,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     }
 
     public void show() {
+        updateStyle();
+        updatePosition();
         if (mUpdateMonitor.userNeedsStrongAuth()) {
             // Keyguard requires strong authentication (not biometrics)
             return;
@@ -738,6 +757,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     }
 
     public void hide() {
+        updateStyle();
+        updatePosition();
         animate().withStartAction(() -> mFading = true)
                 .alpha(0)
                 .setDuration(FADE_ANIM_DURATION)
@@ -888,4 +909,5 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             updatePosition();
         }
     }
+    
 }
