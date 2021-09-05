@@ -13,6 +13,8 @@ public class AccentUtils {
 
     private static ArrayList<String> accentResources = new ArrayList<>(
             Arrays.asList("accent_device_default",
+                    "accent_material_dark",
+                    "accent_material_light",
                     "accent_device_default_light",
                     "accent_device_default_dark",
                     "material_pixel_blue_dark",
@@ -23,6 +25,13 @@ public class AccentUtils {
                     "dialer_theme_color_dark",
                     "dialer_theme_color_20pct",
                     "colorAccent",
+                    "avatar_bg_red",
+                    "folder_indicator_color",
+                    "accent_color_red",
+                    "alert_dialog_color_accent_light",
+                    "alert_dialog_color_accent_dark",
+                    "oneplus_accent_text_color",
+                    "accent_device_default",                    
                     "settingsHeaderColor",
                     "settings_accent_color",
                     "oneplus_accent_color",
