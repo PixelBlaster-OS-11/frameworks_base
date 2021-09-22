@@ -24,6 +24,7 @@ import android.annotation.ColorInt;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -149,6 +150,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private int mRingerMode = AudioManager.RINGER_MODE_NORMAL;
     private AlarmManager.AlarmClockInfo mNextAlarm;
 
+    private final Handler mHandler = new Handler();
     private ImageView mNextAlarmIcon;
     /** {@link TextView} containing the actual text indicating when the next alarm will go off. */
     private TextView mNextAlarmTextView;
@@ -190,6 +192,21 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private float mExpandedHeaderAlpha = 1.0f;
     private float mKeyguardExpansionFraction;
     private boolean mPrivacyChipLogged = false;
+
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+	    mTextClock.setTextColor(Utils.getColorAttrDefaultColor(mContext,
+                        android.R.attr.colorAccent));
+        }
+    }
+
+    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);    
 
     private PrivacyItemController.Callback mPICCallback = new PrivacyItemController.Callback() {
         @Override
@@ -306,6 +323,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         Dependency.get(TunerService.class).addTunable(this,
                 StatusBarIconController.ICON_BLACKLIST,
                 STATUS_BAR_CUSTOM_HEADER);
+
+	   mTextClock.setTextColor(Utils.getColorAttrDefaultColor(mContext,
+                        android.R.attr.colorAccent));
     }
 
     public QuickQSPanel getHeaderQsPanel() {
