@@ -5749,6 +5749,12 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
+         * Weather to show qs clock on left
+         * @hide
+         */
+        public static final String QSCLOCK_LEFT = "qsclock_left";
+
+        /**
          * Whether to enable permissions hub
          * @hide
          */
