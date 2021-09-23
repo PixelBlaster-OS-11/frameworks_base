@@ -539,6 +539,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mExpanded = expanded;
         mHeaderQsPanel.setExpanded(expanded);
         mDateView.setVisibility(mClockView.isClockDateEnabled() ? View.INVISIBLE : View.VISIBLE);
+        mClockView.setVisibility(View.INVISIBLE);
         updateEverything();
     }
 
