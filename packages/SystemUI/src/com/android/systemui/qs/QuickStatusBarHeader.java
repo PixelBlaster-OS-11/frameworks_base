@@ -23,6 +23,7 @@ import static com.android.systemui.util.InjectionInflationController.VIEW_CONTEX
 import android.annotation.ColorInt;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import android.util.MathUtils;
 import android.util.Pair;
 import android.view.ContextThemeWrapper;
 import android.view.DisplayCutout;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -177,6 +179,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     //textClock QS
     private TextClock mTextClock;
+    private DateView mTextDate;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -199,10 +202,18 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             super(handler);
         }
 
+        void observe() {
+            ContentResolver resolver = getContext().getContentResolver();
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.QSCLOCK_LEFT), false,
+                    this, UserHandle.USER_ALL);
+            }
+
         @Override
         public void onChange(boolean selfChange) {
 	    mTextClock.setTextColor(Utils.getColorAttrDefaultColor(mContext,
                         android.R.attr.colorAccent));
+        updateQsClock();                
         }
     }
 
@@ -256,6 +267,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mCommandQueue = commandQueue;
         mRingerModeTracker = ringerModeTracker;
         mUiEventLogger = uiEventLogger;
+        mSettingsObserver.observe();
     }
 
     @Override
@@ -287,6 +299,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mCarrierGroup = findViewById(R.id.carrier_group);
 	    mTextClock = findViewById(R.id.textClock);
         mTextClock.setOnClickListener(this::onClick);
+        mTextDate = findViewById(R.id.textDate);
 
         Rect tintArea = new Rect(0, 0, 0, 0);
         int colorForeground = Utils.getColorAttrDefaultColor(getContext(),
@@ -504,6 +517,23 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
     }
 
+    private void updateQsClock() {
+        boolean qsclock_left = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QSCLOCK_LEFT, 1, UserHandle.USER_CURRENT) == 1;
+        Resources resources = mContext.getResources();
+        int paddingDp = 2;
+        float density = mContext.getResources().getDisplayMetrics().density;
+        int paddingPixel = (int)(paddingDp * density);
+        if (qsclock_left) {
+        mTextClock.setGravity(Gravity.START);
+        mTextDate.setGravity(Gravity.START);
+        mTextDate.setPadding(paddingPixel,0,0,0);
+        } else {
+        mTextClock.setGravity(Gravity.CENTER);
+        mTextDate.setGravity(Gravity.CENTER);
+       }
+    } 
+
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
                 .addFloat(mQuickQsStatusIcons, "alpha", 1, 0, 0)
@@ -539,6 +569,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mExpanded = expanded;
         mHeaderQsPanel.setExpanded(expanded);
         mDateView.setVisibility(mClockView.isClockDateEnabled() ? View.INVISIBLE : View.VISIBLE);
+        mClockView.setVisibility(View.INVISIBLE);
+        updateQsClock();
         updateEverything();
     }
 
