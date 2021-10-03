@@ -38,7 +38,7 @@
         android:format12Hour="hh:mm"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="55dp"/>
+        android:textSize="40dp"/>
 
     <com.android.systemui.statusbar.policy.DateView
         android:id="@+id/textDate"
