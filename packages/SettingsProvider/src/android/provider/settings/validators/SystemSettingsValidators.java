@@ -258,5 +258,6 @@ public class SystemSettingsValidators {
                 });
         VALIDATORS.put(System.FOD_GESTURE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.ACCENT_COLOR, ANY_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.POCKET_JUDGE, BOOLEAN_VALIDATOR);
     }
 }

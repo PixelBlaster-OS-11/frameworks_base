@@ -78,6 +78,7 @@ public class MobileSignalController extends SignalController<
     private final String mNetworkNameDefault;
     private final String mNetworkNameSeparator;
     private final ContentObserver mObserver;
+    private final Handler mHandler = new Handler();
     @VisibleForTesting
     final PhoneStateListener mPhoneStateListener;
     // Save entire info for logging, we only use the id.
@@ -600,6 +601,7 @@ public class MobileSignalController extends SignalController<
 
     @Override
     public void notifyListeners(SignalCallback callback) {
+        mHandler.post(() -> {
         MobileIconGroup icons = getIcons();
 
         String contentDescription = getTextIfExists(getContentDescription()).toString();
@@ -654,6 +656,7 @@ public class MobileSignalController extends SignalController<
                 activityIn, activityOut, volteIcon, dataContentDescription, dataContentDescriptionHtml,
                 description, icons.mIsWide, mSubscriptionInfo.getSubscriptionId(),
                 mCurrentState.roaming);
+        });
     }
 
     @Override
